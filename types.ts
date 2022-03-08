@@ -1,5 +1,8 @@
 export type Pt = [number, number];
-export type ColRow = [number, number]; // Wish I could specific integers here.
+export type IdPt = { id: string; pt: Pt };
+export type Edge = { from: IdPt; to: IdPt };
+
+export type ColRow = [number, number]; // Wish I could specify integers here.
 
 export interface Box {
   id?: string;
