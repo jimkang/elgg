@@ -1,0 +1,9 @@
+.DS_Store
+node_modules
+*.swp
+renderers
+*.map
+config.js
+config.mk
+index.d.ts
+public/build

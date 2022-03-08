@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"outDir": "./built",
+		"allowJs": true,
+		"target": "ES2017",
+		"module": "ES6",
+		"lib": ["ES2017", "DOM"]
+	},
+	"include": [
+		"./**/*"
+	],
+	"exclude": [
+		"./node_modules",
+		"./built",
+		"./index.js"
+	]
+}

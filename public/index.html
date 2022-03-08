@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <title>elgg</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="icon" href="static/crab1.png" type="image/x-icon" />
+    <meta property="og:url" content="https://jimkang.com/crabbington" />
+    <meta property="og:title" content="elgg" />
+    <meta
+      property="og:description"
+      content="This is my 7DRL 2022 entry."
+    />
+    <meta property="og:site_name" content="elgg" />
+    <meta
+      property="og:image"
+      content="https://jimkang.com/crabbington/static/crabbington-preview.gif"
+    />
+  </head>
+  <body>
+    <pre id="status-message" class="hidden"></pre>
+
+    <section class="overlays-container centered-col">
+      <section id="canvases-container" class="centered-col">
+        <canvas id="image-board" width="100vmax" height="95vmin"></canvas>
+        <canvas id="input-board" width="100vmax" height="0"></canvas>
+      </section>
+
+      <section id="ui-board" class="centered-col">
+        <section id="hud-layer" class="">
+          <div class="hud-controls-container">
+            <button id="new-game-button" class="clickable">New Game</button>
+            <button id="open-help-button" class="clickable">Help</button>
+          </div>
+          <div class="status-container">
+            <span class="hp-container"
+              >Health: <span id="current-hp"></span>/<span id="max-hp"></span>
+              hit points.</span
+            >
+            <span class="turn-label"></span>
+          </div>
+        </section>
+        <div id="controls-layer" class="">
+          <ul class="button-list"></ul>
+        </div>
+        <div id="message-layer" class="hidden">
+          <div class="message"></div>
+          <button class="close-message-button clickable">OK!</button>
+        </div>
+
+        <div id="help-layer" class="clickable centered-col hidden">
+          <p>
+            <strong>Help</strong>
+          </p>
+          <img src="static/crab1.png" alt="Picture of a crab" />
+          <div class="directions">
+            <p>
+              <strong>Zoom</strong> using the mouse wheel or pinch gestures.
+            </p>
+            <p><strong>Pan around</strong> by clicking and dragging.</p>
+            <p>
+              <strong>Move</strong> by clicking spaces adjacent to yourself.
+            </p>
+            <p>
+              <strong>Click</strong> neighboring spots to see what your options
+              are. If there are any, they'll come up in the form of buttons like
+              "Take" and "Bonk".
+            </p>
+            <p>
+              You are trying to get the <strong>GRAIL</strong> because you have
+              heard it is the greatest possible shell a hermit crab could have.
+            </p>
+            <p>
+              Some levels may not be winnable because the rocks are laid to make
+              passage to the Grail impossible. Just
+              <strong>reload the browser</strong> if you don't like the level.
+            </p>
+          </div>
+          <button id="close-help-button" class="clickable hidden">OK!</button>
+        </div>
+      </section>
+    </section>
+
+    <div id="version-info"></div>
+
+    <script src="build/bundle.js"></script>
+  </body>
+</html>
