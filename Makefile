@@ -4,6 +4,7 @@ HOMEDIR = $(shell pwd)
 rollup = ./node_modules/.bin/rollup
 sirv = ./node_modules/.bin/sirv
 TSC = node_modules/typescript/bin/tsc
+TSN = node_modules/.bin/ts-node
 
 pushall: sync
 	git push origin master
@@ -17,6 +18,9 @@ build:
 run:
 	$(rollup) -c -w
 
+map-vat:
+	APP=map make run
+
 prettier:
 	prettier --single-quote --write "**/*.html"
 
@@ -29,3 +33,8 @@ sync:
 
 set-up-server-dir:
 	ssh $(USER)@$(SERVER) "mkdir -p $(APPDIR)"
+
+gen-map:
+	$(TSN) tools/generate-map.ts
+	# npx tsc tools/generate-map.ts && \
+  #  node tools/generate-map.js

@@ -7,3 +7,4 @@ config.js
 config.mk
 index.d.ts
 public/build
+vats/**/*-bundle.js
