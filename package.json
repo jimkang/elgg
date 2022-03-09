@@ -1,5 +1,5 @@
 {
-  "name": "elgg",
+  "name": "krusk",
   "version": "1.0.0",
   "description": "7DRL 2022 attempt.",
   "main": "index.js",
@@ -12,16 +12,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:jimkang/elgg.git"
+    "url": "git@github.com:jimkang/krusk.git"
   },
   "keywords": [
     "game"
   ],
   "author": "Jim Kang",
   "bugs": {
-    "url": "https://github.com/jimkang/elgg/issues"
+    "url": "https://github.com/jimkang/krusk/issues"
   },
-  "homepage": "https://github.com/jimkang/elgg",
+  "homepage": "https://github.com/jimkang/krusk",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-json": "^4.1.0",
