@@ -1,6 +1,7 @@
 export type Pt = [number, number];
 export type IdPt = { id: string; pt: Pt };
 export type Edge = { from: IdPt; to: IdPt };
+export interface MapNode extends IdPt { radius: number }
 
 export type ColRow = [number, number]; // Wish I could specify integers here.
 

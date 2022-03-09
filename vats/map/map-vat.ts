@@ -5,7 +5,7 @@ import { createProbable as Probable } from 'probable';
 import seedrandom from 'seedrandom';
 import { kruskal } from 'kruskal-mst';
 import { getNByNGraph } from '../../graph/get-nxn';
-import { IdPt, Edge } from '../../types';
+import { IdPt, Edge, MapNode } from '../../types';
 import { select } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import RandomId from '@jimkang/randomid';
@@ -42,13 +42,13 @@ function followRoute({ seed }) {
 
 function makeMap({ probable, width, height }:
   { probable; width: number; height: number }) {
-  const nodeCount = probable.rollDie(6) + probable.rollDie(6);
-  var mapNodes: Record<string, IdPt>  = {};
+  const nodeCount = probable.rollDie(6) + probable.rollDie(6) + probable.rollDie(6);
+  var mapNodes: Record<string, MapNode>  = {};
   for (var i = 0; i < nodeCount; ++i) {
     const x = probable.roll(width);
     const y  = probable.roll(height);
     const id = x + ',' + y;
-    mapNodes[id] = { id, pt: [x, y] };
+    mapNodes[id] = { id, pt: [x, y], radius: probable.rollDie(3) };
   }
  
   console.log('mapNodes', mapNodes);
@@ -63,16 +63,16 @@ function makeMap({ probable, width, height }:
   return { mapNodes, mstEdges };
 }
 
-function renderNodes(nodes: IdPt[], width: number) {
+function renderNodes(nodes: MapNode[], width: number) {
   var scale = scaleLinear().domain([0, width]).range([0, 100]);
   // Apply scale to both x and y; keep it square.
 
   select('.nodes').selectAll('.node').data(nodes)
     .join('circle')
-    .attr('r', scale(1))
     .attr('fill', 'hsl(80, 50%, 50%)')
-    .attr('cx', (node: IdPt) => scale(node.pt[0]))
-    .attr('cy', (node: IdPt) => scale(node.pt[1]))
+    .attr('cx', (node: MapNode) => scale(node.pt[0]))
+    .attr('cy', (node: MapNode) => scale(node.pt[1]))
+    .attr('r', (node: MapNode) => scale(node.radius))
     .classed('node', true);
 }
 
