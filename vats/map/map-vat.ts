@@ -115,32 +115,24 @@ function tileEdge(tileSize: number, edge: Edge): Tile[] {
     .flat();
 
   function getTilesAtPoint(domainElement: number) {
-    const rangeElement = slope * (domainElement - domain0) + range0;
-    const flooredRangeElement = Math.floor(rangeElement);
-    var floorPt: Pt = [0,0];
-    floorPt[domainIndex] = domainElement;
-    floorPt[rangeIndex] = flooredRangeElement;
-
-    var tiles: Tile[] = [makeTile(floorPt, sourceId, tileSize)];
-
-    if (flooredRangeElement !== rangeElement) {
-      let ceilPt: Pt = [0,0];
-      ceilPt[domainIndex] = domainElement;
-      ceilPt[rangeIndex] = Math.ceil(rangeElement);
-      tiles.push(makeTile(ceilPt, sourceId, tileSize));
+    const rangeCenter = slope * (domainElement - domain0) + range0;
+    const rangeLowerBound = Math.round(rangeCenter - minWidth/2);
+    // If minWidth is 1 and the rangeElement falls between whole numbers,
+    // we're just going to have two tiles to cover that.
+    let minElements = minWidth;
+    if (minElements < 2 && rangeCenter !== Math.floor(rangeCenter)) {
+      minElements = 2;
     }
+    var rangeElements: number[] = range(rangeLowerBound, rangeLowerBound + minElements);
 
-    // The width is going to be perpendicular to the x-axis or y-axis
-    // instead of to the actual edge, but this may be good enough.
-    // TODO: Handle minWidth > 2
-    if (minWidth === 2 && tiles.length < minWidth) {
+    return rangeElements.map(makeTileAtPoint);
+
+    function makeTileAtPoint(rangeElement) {
       let pt: Pt = [0,0];
       pt[domainIndex] = domainElement;
-      pt[rangeIndex] = Math.floor(rangeElement) - 1;
-      tiles.push(makeTile(pt, sourceId, tileSize)); 
+      pt[rangeIndex] = rangeElement;
+      return makeTile(pt, sourceId, tileSize); 
     }
- 
-    return tiles;
   }
 }
 
