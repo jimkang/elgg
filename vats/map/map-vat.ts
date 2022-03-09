@@ -85,16 +85,18 @@ function tileEdge(tileSize: number, edge: Edge): Tile[] {
   const traditionalSlope = dy/dx;
   // If traditionalSlope is greater than 1, use y as the domain, for finer-grain traversal.
   // If it's less than 1, use x as the domain.
-  const domainIndex = Math.abs(traditionalSlope) > 1 ? 1 : 0;
-  const rangeIndex = Math.abs(traditionalSlope) > 1 ? 0 : 1;
-
-  const slope = Math.abs(traditionalSlope) > 1 ? 1/traditionalSlope : traditionalSlope;
   
-  if (slope > 1) {
-    //return tileVerticalEdge(getEdgeId(edge), tileSize, edge);
-  }
-
-  const domainSign = dx > 0 ? 1 : -1;
+  let domainIndex = 0;
+  let rangeIndex = 1;
+  let slope = traditionalSlope;
+  let domainSign = dx > 0 ? 1 : -1;
+  if (Math.abs(traditionalSlope) > 1) { 
+    domainIndex = 1;
+    rangeIndex = 0 ;
+    slope =  1/traditionalSlope;
+    domainSign = dy > 0 ? 1 : -1;
+  } 
+   
   var domainValues = range(
     edge.from.pt[domainIndex],
     // Include the endpoint.
