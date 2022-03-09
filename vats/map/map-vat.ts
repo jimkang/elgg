@@ -108,6 +108,8 @@ function tileEdge(tileSize: number, edge: Edge): Tile[] {
   const sourceId = getEdgeId(edge);
   const domain0 = edge.from.pt[domainIndex];
   const range0 = edge.from.pt[rangeIndex];
+  const minWidth = Math.abs(slope) === 1 ? 2 : 1;
+
   return domainValues
     .map(getTilesAtPoint)
     .flat();
@@ -119,28 +121,25 @@ function tileEdge(tileSize: number, edge: Edge): Tile[] {
     floorPt[domainIndex] = domainElement;
     floorPt[rangeIndex] = flooredRangeElement;
 
-    var tiles: Tile[] = [
-      {
-        id: `tile-${getPtId(floorPt)}`,
-        sourceId,
-        sourceType: 'Edge',
-        length: tileSize,
-        pt: floorPt
-      }
-    ];
+    var tiles: Tile[] = [makeTile(floorPt, sourceId, tileSize)];
 
     if (flooredRangeElement !== rangeElement) {
       let ceilPt: Pt = [0,0];
       ceilPt[domainIndex] = domainElement;
       ceilPt[rangeIndex] = Math.ceil(rangeElement);
-      tiles.push({
-        id: `tile-${getPtId(ceilPt)}`,
-        sourceId,
-        sourceType: 'Edge',
-        length: tileSize,
-        pt: ceilPt 
-      });
+      tiles.push(makeTile(ceilPt, sourceId, tileSize));
     }
+
+    // The width is going to be perpendicular to the x-axis or y-axis
+    // instead of to the actual edge, but this may be good enough.
+    // TODO: Handle minWidth > 2
+    if (minWidth === 2 && tiles.length < minWidth) {
+      let pt: Pt = [0,0];
+      pt[domainIndex] = domainElement;
+      pt[rangeIndex] = Math.floor(rangeElement) - 1;
+      tiles.push(makeTile(pt, sourceId, tileSize)); 
+    }
+ 
     return tiles;
   }
 }
@@ -194,6 +193,16 @@ function getEdgeId(edge: Edge): string {
 
 function getPtId(pt: Pt): string {
   return pt[0] + ',' + pt[1];
+}
+
+function makeTile(pt: Pt, sourceId: string, length: number): Tile {
+  return     {
+    id: `tile-${getPtId(pt)}`,
+    sourceId,
+    sourceType: 'Edge',
+    length,
+    pt
+  };
 }
 
 function reportTopLevelError(msg, url, lineNo, columnNo, error) {

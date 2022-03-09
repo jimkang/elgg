@@ -1,6 +1,6 @@
 export type Pt = [number, number];
 export type IdPt = { id: string; pt: Pt };
-export type Edge = { from: IdPt; to: IdPt };
+export type Edge = { from: IdPt; to: IdPt; width?: number };
 export interface MapNode extends IdPt { radius: number }
 export interface Tile extends IdPt {
   length: number;
