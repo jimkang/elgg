@@ -33,10 +33,10 @@ function followRoute({ seed }) {
   const width = 19;
   const height = 19;
 
-  var { mapNodes, mstEdges, edgeTiles } = makeMap({ probable, width, height });
+  var { mapNodes, edges, edgeTiles } = makeMap({ probable, width, height });
 
   renderNodes(Object.values(mapNodes), width);
-  renderEdges(mstEdges, width);
+  renderEdges(edges, width);
   renderTiles(edgeTiles, width);
 }
 
@@ -59,10 +59,10 @@ function renderEdges(edges: Edge[], width: number) {
 
   select('.edges').selectAll('.edge').data(edges)
     .join('line')
-    .attr('x1', (edge: Edge) => scale(edge.from.pt[0]))
-    .attr('y1', (edge: Edge) => scale(edge.from.pt[1]))
-    .attr('x2', (edge: Edge) => scale(edge.to.pt[0]))
-    .attr('y2', (edge: Edge) => scale(edge.to.pt[1]))
+    .attr('x1', (edge: Edge) => scale(edge.start.pt[0]))
+    .attr('y1', (edge: Edge) => scale(edge.start.pt[1]))
+    .attr('x2', (edge: Edge) => scale(edge.end.pt[0]))
+    .attr('y2', (edge: Edge) => scale(edge.end.pt[1]))
     .attr('stroke', 'hsl(200, 50%, 50%)')
     .attr('width', 2)
     .classed('edge', true);

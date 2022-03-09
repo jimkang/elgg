@@ -4,7 +4,8 @@
 		"allowJs": true,
 		"target": "ES2017",
 		"module": "ES6",
-		"lib": ["ES2017", "DOM"]
+		"lib": ["ES2017", "DOM"],
+    "moduleResolution": "node"
 	},
 	"include": [
 		"./**/*"

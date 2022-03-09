@@ -1,6 +1,7 @@
 export type Pt = [number, number];
 export type IdPt = { id: string; pt: Pt };
-export type Edge = { from: IdPt; to: IdPt; width?: number };
+// from and to are string start.id and end.id for the benefit of Kruskal.
+export type Edge = { start: IdPt; end: IdPt; from?: string; to?: string; weight?: number; width: number };
 export interface MapNode extends IdPt { radius: number }
 export interface Tile extends IdPt {
   length: number;
