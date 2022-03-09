@@ -46,6 +46,9 @@ function followRoute({ seed }) {
 
 function makeMap({ probable, width, height }:
   { probable; width: number; height: number }) {
+  
+  var edgeWidthTable = probable.createTableFromSizes([ [4, 1], [2, 2], [1, 3]]);
+
   const nodeCount = probable.rollDie(6) + probable.rollDie(6) + probable.rollDie(6);
   var mapNodes: Record<string, MapNode>  = {};
   for (var i = 0; i < nodeCount; ++i) {
@@ -63,6 +66,7 @@ function makeMap({ probable, width, height }:
 
   var mstEdges = kruskal(allEdges)
     .map(({ from, to, weight }) => ({ weight, from: mapNodes[from], to: mapNodes[to] }));
+  mstEdges.forEach((edge: Edge) => edge.width = edgeWidthTable.roll());
   console.log('mstEdges', mstEdges);
 
   var edgeTiles = sortedUniqBy(tileEdges({ edges: mstEdges, tileSize: 1 }), tile => tile.id);
@@ -108,7 +112,7 @@ function tileEdge(tileSize: number, edge: Edge): Tile[] {
   const sourceId = getEdgeId(edge);
   const domain0 = edge.from.pt[domainIndex];
   const range0 = edge.from.pt[rangeIndex];
-  const minWidth = Math.abs(slope) === 1 ? 2 : 1;
+  const minWidth = Math.max(edge.width, Math.abs(slope) === 1 ? 2 : 1);
 
   return domainValues
     .map(getTilesAtPoint)
