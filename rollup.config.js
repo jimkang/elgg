@@ -21,7 +21,6 @@ var configs = [
       reloadPath: `vats/${v}`,
       serve: process.env.APP === v && serve,
       serveOpts: { rootDir: '.', serveDir: `vats/${v}`,port: 7000 },
-      
     }))
   )
   .map(createConfig);
