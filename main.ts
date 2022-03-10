@@ -59,6 +59,11 @@ function proceedWithAssets({ mapNodes, edges, edgeTiles, nodeTiles }, loader, re
 
   nodeTiles.forEach(addFloorTileSprite);
   edgeTiles.forEach(addFloorTileSprite);
+
+  app.stage.y = 100;
+  app.stage.scale.x = 0.5;
+  app.stage.scale.y = 0.5;
+
   app.renderer.render(app.stage);
 
   document.body.append(app.view);
