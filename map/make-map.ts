@@ -32,7 +32,7 @@ export function makeMap({ probable, width, height }:
   console.log('mstEdges', mstEdges);
 
   var extraEdges = allEdges.filter((edge: Edge) => !mstEdges.find(mstEdge => edgesAreEqual(mstEdge, edge)));
-  const extraEdgeLimit = Math.floor(mstEdges.length/3);
+  const extraEdgeLimit = Math.floor(mstEdges.length/2);
   const extraEdgeCount = probable.roll(extraEdgeLimit);
   // Not a deep clone.
   var edges = mstEdges.concat(probable.sample(extraEdges, extraEdgeCount));
