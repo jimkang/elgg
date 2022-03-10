@@ -22,7 +22,7 @@ var routeState = RouteState({
   routeState.routeFromHash();
 })();
 
-function followRoute({ seed }) {
+function followRoute({ seed, width = 32, height = 32 }) {
   if (!seed) {
     routeState.addToRoute({ seed: randomid(8) });
     return;
@@ -30,9 +30,6 @@ function followRoute({ seed }) {
   var random = seedrandom(seed);
   var probable = Probable({ random });
   console.log('seed', seed);
-
-  const width = 19;
-  const height = 19;
 
   var { mapNodes, edges, edgeTiles, nodeTiles } = makeMap({ probable, width, height });
 

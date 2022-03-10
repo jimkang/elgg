@@ -1,3 +1,7 @@
 .board {
   border: solid 1px #444;
 }
+
+.tile {
+  stroke-width: 0.1;
+}
