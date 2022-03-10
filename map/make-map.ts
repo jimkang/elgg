@@ -10,16 +10,17 @@ import { edgesAreEqual } from '../utils/comparisons';
 export function makeMap({ probable, width, height }:
   { probable; width: number; height: number }) {
   
-  var edgeWidthTable = probable.createTableFromSizes([ [4, 1], [2, 2], [1, 3]]);
+  var edgeWidthTable = probable.createTableFromSizes([[4, 1], [2, 2], [1, 3]]);
 
   const nodeCount = probable.rollDie(6) + probable.rollDie(6) + probable.rollDie(6);
   var mapNodes: Record<string, MapNode>  = {};
   for (var i = 0; i < nodeCount; ++i) {
-    const x = probable.roll(width);
-    const y  = probable.roll(height);
+    const radius = probable.rollDie(3); 
+    const x = radius + probable.roll(width - 2 * radius);
+    const y = radius + probable.roll(height- 2 * radius);
     const pt: Pt = [x, y];
     const id = getPtId(pt);
-    mapNodes[id] = { id, pt, radius: probable.rollDie(3) };
+    mapNodes[id] = { id, pt, radius };
   }
  
   console.log('mapNodes', mapNodes);
