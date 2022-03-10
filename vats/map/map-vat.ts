@@ -8,6 +8,7 @@ import { select } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import RandomId from '@jimkang/randomid';
 import { makeMap } from '../../map/make-map';
+import accessor from 'accessor';
 
 var randomid = RandomId();
 
@@ -33,11 +34,11 @@ function followRoute({ seed }) {
   const width = 19;
   const height = 19;
 
-  var { mapNodes, edges, edgeTiles } = makeMap({ probable, width, height });
+  var { mapNodes, edges, edgeTiles, nodeTiles } = makeMap({ probable, width, height });
 
   renderNodes(Object.values(mapNodes), width);
   renderEdges(edges, width);
-  renderTiles(edgeTiles, width);
+  renderTiles(edgeTiles.concat(nodeTiles), width);
 }
 
 function renderNodes(nodes: MapNode[], width: number) {
@@ -72,7 +73,7 @@ function renderTiles(tiles: Tile[], width: number) {
   var scale = scaleLinear().domain([0, width]).range([0, 100]);
   // Apply scale to both x and y; keep it square.
 
-  select('.tiles').selectAll('.tile').data(tiles)
+  select('.tiles').selectAll('.tile').data(tiles, accessor())
     .join('rect')
     .attr('stroke', 'hsl(240, 50%, 50%)')
     .attr('fill', 'transparent')

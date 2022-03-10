@@ -2,9 +2,9 @@
 	"compilerOptions": {
 		"outDir": "./built",
 		"allowJs": true,
-		"target": "ES2017",
+		"target": "ES2019",
 		"module": "ES6",
-		"lib": ["ES2017", "DOM"],
+		"lib": ["ES2019", "DOM"],
     "moduleResolution": "node"
 	},
 	"include": [

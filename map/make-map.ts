@@ -45,12 +45,18 @@ export function makeMap({ probable, width, height }:
   );
   console.log('edgeTiles', edgeTiles);
 
-  return { mapNodes, edges, edgeTiles };
+  var nodeTiles = sortedUniqBy(
+    tileMapNodes({ nodes: Object.values(mapNodes), tileSize: 1 }),
+    tile => tile.id
+  );
+  console.log('nodeTiles', nodeTiles);
+
+  return { mapNodes, edges, edgeTiles, nodeTiles };
 }
 
 function tileEdges({ edges, tileSize }: { edges: Edge[]; tileSize: number }): Tile[] {
   var tileGroups = edges.map(curry(tileEdge)(tileSize));
-  return tileGroups.flat();
+  return tileGroups.flat() as Tile[];
 }
 
 // This is sort of like Bresenham's line-scanning algorithm, except that we select
@@ -111,6 +117,38 @@ function tileEdge(tileSize: number, edge: Edge): Tile[] {
       return makeTile(pt, sourceId, tileSize); 
     }
   }
+}
+
+function tileMapNodes({ nodes, tileSize }: { nodes: MapNode[]; tileSize: number }): Tile[] {
+  var tileGroups = nodes.map(curry(tileMapNode)(tileSize));
+  return tileGroups.flat() as Tile[];
+}
+
+function tileMapNode(tileSize: number, node: MapNode): Tile[] {
+  const rSq = node.radius * node.radius;
+  // Tile a quarter circle.
+  var quarterCircleBorder: Pt[] = range(0, node.radius + 1)
+    .map(x => [x, Math.sqrt(rSq - x * x)]);
+
+  var quarterCirclePts: Pt[] = [];
+  for (let i = 0; i < quarterCircleBorder.length; ++i) {
+    let borderPt: Pt = quarterCircleBorder[i];
+    const yMax = borderPt[1];
+    for (let y = 0; y <= yMax; ++y) {
+      quarterCirclePts.push([borderPt[0], y]);
+    }
+  }
+
+  // Reflect it to fill out the rest of the circle.
+  var preOffsetPts: Pt[] = quarterCirclePts.slice()
+    .concat(quarterCirclePts.map(([x, y]) => [-x, y]))
+    .concat(quarterCirclePts.map(([x, y]) => [-x, -y]))
+    .concat(quarterCirclePts.map(([x, y]) => [x, -y]));
+
+  preOffsetPts = sortedUniqBy(preOffsetPts, getPtId);
+ 
+  var pts: Pt[] = preOffsetPts.map(pt => [pt[0] + node.pt[0], pt[1] + node.pt[1]]);
+  return pts.map(pt => makeTile(pt, node.id, tileSize));
 }
 
 function makeTile(pt: Pt, sourceId: string, length: number): Tile {
