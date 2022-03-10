@@ -33,15 +33,21 @@ function followRoute({ seed, width = 32, height = 32 }) {
 
   var { mapNodes, edges, edgeTiles, nodeTiles } = makeMap({ probable, width, height });
 
-  renderNodes(Object.values(mapNodes), width);
-  renderEdges(edges, width);
-  renderTiles(edgeTiles.concat(nodeTiles), width);
-}
-
-function renderNodes(nodes: MapNode[], width: number) {
   var scale = scaleLinear().domain([0, width]).range([0, 100]);
   // Apply scale to both x and y; keep it square.
 
+  // We put the center of a tile at integer coordinates. So, a tile at 0, 0 has its
+  // center on the corner of the view. We need to shift things a bit to show the
+  // whole tile.
+  const halfTileLength = scale(0.5);
+  select('.outmost').attr('transform', `translate(${halfTileLength}, ${halfTileLength})`);
+
+  renderNodes(Object.values(mapNodes), scale);
+  renderEdges(edges, scale);
+  renderTiles(edgeTiles.concat(nodeTiles), scale);
+}
+
+function renderNodes(nodes: MapNode[], scale) {
   select('.nodes').selectAll('.node').data(nodes)
     .join('circle')
     .attr('fill', 'hsl(80, 50%, 50%)')
@@ -51,10 +57,7 @@ function renderNodes(nodes: MapNode[], width: number) {
     .classed('node', true);
 }
 
-function renderEdges(edges: Edge[], width: number) {
-  var scale = scaleLinear().domain([0, width]).range([0, 100]);
-  // Apply scale to both x and y; keep it square.
-
+function renderEdges(edges: Edge[], scale) {
   select('.edges').selectAll('.edge').data(edges)
     .join('line')
     .attr('x1', (edge: Edge) => scale(edge.start.pt[0]))
@@ -66,10 +69,7 @@ function renderEdges(edges: Edge[], width: number) {
     .classed('edge', true);
 }
 
-function renderTiles(tiles: Tile[], width: number) {
-  var scale = scaleLinear().domain([0, width]).range([0, 100]);
-  // Apply scale to both x and y; keep it square.
-
+function renderTiles(tiles: Tile[], scale) {
   select('.tiles').selectAll('.tile').data(tiles, accessor())
     .join('rect')
     .attr('stroke', 'hsl(240, 50%, 50%)')
