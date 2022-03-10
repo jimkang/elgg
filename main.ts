@@ -8,8 +8,9 @@ import { makeMap } from './map/make-map';
 import { Rectangle, Sprite, Loader, Application, utils } from 'pixi.js';
 import { Tile } from './types';
 import curry from 'lodash.curry';
-
+import { wireZoomControls } from './dom/wire-zoom-controls';
 import RandomId from '@jimkang/randomid';
+
 var randomid = RandomId();
 
 const tileLength = 32;
@@ -38,12 +39,12 @@ function followRoute({ seed }) {
 
   Loader.shared
     .add('assets/atlas.json')
-    .load(curry(proceedWithAssets)({ mapNodes, edges, edgeTiles, nodeTiles }));
+    .load(curry(setUpWithAssets)({ mapNodes, edges, edgeTiles, nodeTiles }));
 // TODO: Error handling?
 // TODO: Is it really necessary to load images at runtime? Can I just build them into the bundle?
 }
 
-function proceedWithAssets({ mapNodes, edges, edgeTiles, nodeTiles }, loader, resources) {
+function setUpWithAssets({ mapNodes, edges, edgeTiles, nodeTiles }, loader, resources) {
   var texture = utils.TextureCache['floor-tile-green.png'];
   var rect = new Rectangle(0, 0, 32, 32);
   texture.frame = rect;
@@ -64,8 +65,9 @@ function proceedWithAssets({ mapNodes, edges, edgeTiles, nodeTiles }, loader, re
   //app.stage.scale.y = 0.5;
 
   app.renderer.render(app.stage);
-
   document.body.append(app.view);
+
+  wireZoomControls({ onZoomCtrlChange });
 
   function addFloorTileSprite(tile: Tile) {
     var floorTile = new Sprite(texture);
@@ -74,6 +76,12 @@ function proceedWithAssets({ mapNodes, edges, edgeTiles, nodeTiles }, loader, re
     floorTile.x = tile.pt[0] * tileLength;
     floorTile.y = tile.pt[1] * tileLength;
     app.stage.addChild(floorTile);
+  }
+
+  function onZoomCtrlChange({ newScale }) {
+    app.stage.scale.x = +newScale;
+    app.stage.scale.y = +newScale;
+    app.renderer.render(app.stage);
   }
 }
 
