@@ -37,16 +37,15 @@ function followRoute({ seed }) {
   var { mapNodes, edges, edgeTiles, nodeTiles } = makeMap({ probable, width, height });
 
   Loader.shared
-    .add('overworld', 'images/Overworld.png')
+    .add('assets/atlas.json')
     .load(curry(proceedWithAssets)({ mapNodes, edges, edgeTiles, nodeTiles }));
 // TODO: Error handling?
 // TODO: Is it really necessary to load images at runtime? Can I just build them into the bundle?
 }
 
 function proceedWithAssets({ mapNodes, edges, edgeTiles, nodeTiles }, loader, resources) {
-  // TODO: Texture atlas.
-  var texture = utils.TextureCache['overworld'];
-  var rect = new Rectangle(0, 41 * 16, 16, 16);
+  var texture = utils.TextureCache['floor-tile-green.png'];
+  var rect = new Rectangle(0, 0, 32, 32);
   texture.frame = rect;
   
   var app = new Application({
@@ -61,8 +60,8 @@ function proceedWithAssets({ mapNodes, edges, edgeTiles, nodeTiles }, loader, re
   edgeTiles.forEach(addFloorTileSprite);
 
   app.stage.y = 100;
-  app.stage.scale.x = 0.5;
-  app.stage.scale.y = 0.5;
+  //app.stage.scale.x = 0.5;
+  //app.stage.scale.y = 0.5;
 
   app.renderer.render(app.stage);
 
