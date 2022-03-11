@@ -2,7 +2,6 @@
 node_modules
 *.swp
 *.swo
-renderers
 *.map
 config.js
 config.mk
