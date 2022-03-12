@@ -7,7 +7,7 @@ import { version } from './package.json';
 import { makeMap } from './map/make-map';
 import { makePlayer } from './souls/make-player';
 import { Loader, Application, Sprite } from 'pixi.js';
-import { wireZoomControls } from './dom/wire-zoom-controls';
+import { wireDOMUI } from './dom/wire-dom-ui';
 import { wireKeys } from './dom/wire-keys';
 import RandomId from '@jimkang/randomid';
 import { renderMap } from './renderers/render-map';
@@ -47,6 +47,7 @@ function followRoute({ seed }) {
 
 function setUp(seed) {
   resourcesLoaded = true;
+  var paused = false;
 
   var random = seedrandom(seed);
   var prob = Probable({ random });
@@ -70,7 +71,7 @@ function setUp(seed) {
 
   renderMap({ app, edgeTiles, nodeTiles });
 
-  wireZoomControls({ onZoomCtrlChange });
+  wireDOMUI({ onZoomCtrlChange, onPauseToggle: () => { paused = !paused; } });
   wireKeys({ onKeyDirection });
 
   app.ticker.add(GameLoop({ app, spriteCache, souls: [ player ]}));
@@ -82,6 +83,10 @@ function setUp(seed) {
   }
 
   function onKeyDirection(vector: Pt) {
+    if (paused) {
+      return;
+    }
+
     player.pos = addPairs(player.pos, vector);
     // TODO: Kick off everyone else's turn before changing pos.
   }
