@@ -8,9 +8,12 @@ import { makeMap } from './map/make-map';
 import { makePlayer } from './souls/make-player';
 import { Loader, Application, Sprite } from 'pixi.js';
 import { wireZoomControls } from './dom/wire-zoom-controls';
+import { wireKeys } from './dom/wire-keys';
 import RandomId from '@jimkang/randomid';
 import { renderMap } from './renderers/render-map';
-import { renderSouls } from './renderers/render-souls';
+import { addPairs } from 'basic-2d-math';
+import { GameLoop } from './updaters/game-loop';
+import { Pt } from './types';
 
 var randomid = RandomId();
 var resourcesLoaded = false;
@@ -66,14 +69,21 @@ function setUp(seed) {
   var player = makePlayer({ prob, edgeTiles, nodeTiles });
 
   renderMap({ app, edgeTiles, nodeTiles });
-  renderSouls({ app, spriteCache, souls: [ player ] });
 
   wireZoomControls({ onZoomCtrlChange });
+  wireKeys({ onKeyDirection });
+
+  app.ticker.add(GameLoop({ app, spriteCache, souls: [ player ]}));
 
   function onZoomCtrlChange({ newScale }) {
     app.stage.scale.x = +newScale;
     app.stage.scale.y = +newScale;
     app.renderer.render(app.stage);
+  }
+
+  function onKeyDirection(vector: Pt) {
+    player.pos = addPairs(player.pos, vector);
+    // TODO: Kick off everyone else's turn before changing pos.
   }
 }
 
