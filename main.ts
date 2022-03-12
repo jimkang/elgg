@@ -48,13 +48,14 @@ function followRoute({ seed }) {
 function setUp(seed) {
   resourcesLoaded = true;
   var paused = false;
+  var spriteCache: Record<string, Sprite> = {};
 
   var random = seedrandom(seed);
   var prob = Probable({ random });
   const width = 32;
   const height = 32;
+  const tileLength = 32;
 
-  var spriteCache: Record<string, Sprite> = {};
   var app = new Application({
     width: 800,
     height: 600,
@@ -63,18 +64,17 @@ function setUp(seed) {
     resolution: 1
   });
 
-  app.stage.y = 100;
   document.body.append(app.view);
 
   var { mapNodes, edges, edgeTiles, nodeTiles } = makeMap({ prob, width, height });
   var player = makePlayer({ prob, edgeTiles, nodeTiles });
 
-  renderMap({ app, edgeTiles, nodeTiles });
+  renderMap({ app, edgeTiles, nodeTiles, tileLength });
 
   wireDOMUI({ onZoomCtrlChange, onPauseToggle: () => { paused = !paused; } });
   wireKeys({ onKeyDirection });
 
-  app.ticker.add(GameLoop({ app, spriteCache, souls: [ player ]}));
+  app.ticker.add(GameLoop({ app, spriteCache, souls: [ player ], player, tileLength }));
 
   function onZoomCtrlChange({ newScale }) {
     app.stage.scale.x = +newScale;

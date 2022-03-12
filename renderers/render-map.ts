@@ -1,9 +1,7 @@
 import { Rectangle, Sprite, utils } from 'pixi.js';
 import { Tile } from '../types';
 
-const tileLength = 32;
-
-export function renderMap({ app, edgeTiles, nodeTiles }) {
+export function renderMap({ app, edgeTiles, nodeTiles, tileLength }) {
   var texture = utils.TextureCache['floor-tile-green.png'];
   var rect = new Rectangle(0, 0, tileLength, tileLength);
   texture.frame = rect;
