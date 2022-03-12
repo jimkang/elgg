@@ -72,27 +72,22 @@ export interface SoulProcessor {
   (targetTree: TargetTree, souls: Array<Soul>): void;
 }
 
+export type soulType = 'figure' | 'background';
+
 export interface SoulDef {
-  type: string;
-  categories: Array<string>;
+  type: soulType;
   move?: MoveFn;
   canMoveHereFn?: CanMoveHereFn;
   getInteractionsWithThing?: (Soul, any) => Array<CommandDef>;
-  sprite: Sprite;
-  allowedGrids: Array<string>;
-  startingItemIds?: Array<string>;
-  itemRole?: ItemRole;
   facingsAllowed?: Array<Pt>;
   hitDice?: string;
+  textureId?: string;
 }
 
 export interface Soul extends SoulDef, Partial<Box> {
   id: string;
-  facing: Pt;
-  // TODO: Replace x and y with Pt.
-  x?: number;
-  y?: number;
-  gridContext?: GridContext;
+  direction: Pt;
+  pos: Pt;
   items: Array<Soul>;
   hp?: number;
   maxHP?: number;

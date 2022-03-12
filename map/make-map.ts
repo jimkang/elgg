@@ -7,17 +7,17 @@ import sortedUniqBy from 'lodash.sorteduniqby';
 import { getPtId, getEdgeId } from '../utils/ids';
 import { edgesAreEqual } from '../utils/comparisons';
 
-export function makeMap({ probable, width, height }:
-  { probable; width: number; height: number }) {
+export function makeMap({ prob, width, height }:
+  { prob; width: number; height: number }) {
   
-  var edgeWidthTable = probable.createTableFromSizes([[4, 1], [2, 2], [1, 3]]);
+  var edgeWidthTable = prob.createTableFromSizes([[4, 1], [2, 2], [1, 3]]);
 
-  const nodeCount = probable.rollDie(6) + probable.rollDie(6) + probable.rollDie(6);
+  const nodeCount = prob.rollDie(6) + prob.rollDie(6) + prob.rollDie(6);
   var mapNodes: Record<string, MapNode>  = {};
   for (var i = 0; i < nodeCount; ++i) {
-    const radius = probable.rollDie(3); 
-    const x = radius + probable.roll(width - 2 * radius);
-    const y = radius + probable.roll(height- 2 * radius);
+    const radius = prob.rollDie(3); 
+    const x = radius + prob.roll(width - 2 * radius);
+    const y = radius + prob.roll(height- 2 * radius);
     const pt: Pt = [x, y];
     const id = getPtId(pt);
     mapNodes[id] = { id, pt, radius };
@@ -33,9 +33,9 @@ export function makeMap({ probable, width, height }:
 
   var extraEdges = allEdges.filter((edge: Edge) => !mstEdges.find(mstEdge => edgesAreEqual(mstEdge, edge)));
   const extraEdgeLimit = Math.floor(mstEdges.length/2);
-  const extraEdgeCount = probable.roll(extraEdgeLimit);
+  const extraEdgeCount = prob.roll(extraEdgeLimit);
   // Not a deep clone.
-  var edges = mstEdges.concat(probable.sample(extraEdges, extraEdgeCount));
+  var edges = mstEdges.concat(prob.sample(extraEdges, extraEdgeCount));
   // Add variable widths.
   edges.forEach((edge: Edge) => edge.width = edgeWidthTable.roll());
   console.log('edges', edges);

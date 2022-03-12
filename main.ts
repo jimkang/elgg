@@ -5,12 +5,15 @@ import { createProbable as Probable } from 'probable';
 import seedrandom from 'seedrandom';
 import { version } from './package.json';
 import { makeMap } from './map/make-map';
-import { Loader, Application } from 'pixi.js';
+import { makePlayer } from './souls/make-player';
+import { Loader, Application, Sprite } from 'pixi.js';
 import { wireZoomControls } from './dom/wire-zoom-controls';
 import RandomId from '@jimkang/randomid';
 import { renderMap } from './renderers/render-map';
+import { renderSouls } from './renderers/render-souls';
 
 var randomid = RandomId();
+var resourcesLoaded = false;
 
 var routeState = RouteState({
   followRoute,
@@ -28,18 +31,26 @@ function followRoute({ seed }) {
     routeState.addToRoute({ seed: randomid(8) });
     return;
   }
-  Loader.shared
-    .add('assets/atlas.json')
-    .load(() => setUp(seed));
-// TODO: Error handling?
+ 
+  if (resourcesLoaded) {
+    setUp(seed);
+  } else {
+    Loader.shared
+      .add('assets/atlas.json')
+      .load(() => setUp(seed));
+    // TODO: Error handling?
+  }
 }
 
 function setUp(seed) {
+  resourcesLoaded = true;
+
   var random = seedrandom(seed);
-  var probable = Probable({ random });
+  var prob = Probable({ random });
   const width = 32;
   const height = 32;
 
+  var spriteCache: Record<string, Sprite> = {};
   var app = new Application({
     width: 800,
     height: 600,
@@ -48,12 +59,14 @@ function setUp(seed) {
     resolution: 1
   });
 
-  var { mapNodes, edges, edgeTiles, nodeTiles } = makeMap({ probable, width, height });
-
   app.stage.y = 100;
   document.body.append(app.view);
 
+  var { mapNodes, edges, edgeTiles, nodeTiles } = makeMap({ prob, width, height });
+  var player = makePlayer({ prob, edgeTiles, nodeTiles });
+
   renderMap({ app, edgeTiles, nodeTiles });
+  renderSouls({ app, spriteCache, souls: [ player ] });
 
   wireZoomControls({ onZoomCtrlChange });
 
