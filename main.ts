@@ -55,10 +55,12 @@ function setUp(seed) {
   const width = 32;
   const height = 32;
   const tileLength = 32;
+  const baseStageWidth = 800;
+  const baseStageHeight = 600;
 
   var app = new Application({
-    width: 800,
-    height: 600,
+    width: baseStageWidth,
+    height: baseStageHeight,
     antialias: false,
     transparent: false,
     resolution: 1

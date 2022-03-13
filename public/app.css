@@ -24,6 +24,10 @@ body {
 
 /* Canvases stuff */
 
+canvas {
+  border: solid 1px white;
+}
+
 .canvases-container {
   display: flex;
   width: 100%;
