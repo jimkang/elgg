@@ -6,7 +6,7 @@ import curry from 'lodash.curry';
 import sortedUniqBy from 'lodash.sorteduniqby';
 import { getPtId, getEdgeId } from '../utils/ids';
 import { edgesAreEqual } from '../utils/comparisons';
-
+import { getWallTiles } from './get-wall-tiles';
 export function makeMap({ prob, width, height }:
   { prob; width: number; height: number }) {
   
@@ -52,7 +52,7 @@ export function makeMap({ prob, width, height }:
   );
   console.log('nodeTiles', nodeTiles);
 
-  return { mapNodes, edges, edgeTiles, nodeTiles };
+  return { mapNodes, edges, edgeTiles, nodeTiles, wallTiles: getWallTiles({ edgeTiles, nodeTiles }) };
 }
 
 function tileEdges({ edges, tileSize }: { edges: Edge[]; tileSize: number }): Tile[] {

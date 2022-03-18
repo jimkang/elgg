@@ -68,7 +68,7 @@ function setUp(seed) {
 
   document.body.append(app.view);
 
-  var { mapNodes, edges, edgeTiles, nodeTiles } = makeMap({ prob, width, height });
+  var { mapNodes, edges, edgeTiles, nodeTiles, wallTiles } = makeMap({ prob, width, height });
   var player = makePlayer({ prob, edgeTiles, nodeTiles });
 
   renderMap({ app, edgeTiles, nodeTiles, tileLength });
@@ -76,7 +76,7 @@ function setUp(seed) {
   wireDOMUI({ onZoomCtrlChange, onPauseToggle: () => { paused = !paused; } });
   wireKeys({ onKeyDirection });
 
-  app.ticker.add(GameLoop({ app, spriteCache, souls: [ player ], player, tileLength }));
+  app.ticker.add(GameLoop({ app, spriteCache, souls: wallTiles.concat([ player ]), player, tileLength }));
 
   function onZoomCtrlChange({ newScale }) {
     app.stage.scale.x = +newScale;

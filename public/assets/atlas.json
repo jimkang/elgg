@@ -15,14 +15,22 @@
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
 	"sourceSize": {"w":32,"h":32}
+},
+"wall-tile-green.png":
+{
+	"frame": {"x":64,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
 }},
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "atlas.png",
 	"format": "RGBA8888",
-	"size": {"w":64,"h":32},
+	"size": {"w":96,"h":32},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:2c443e4ba2c8c1786708daac804b4c29:930b196657701bebdbd59c1c380d4b7f:cbce6b53f0f49e0bf15173c25c41f876$"
+	"smartupdate": "$TexturePacker:SmartUpdate:e70440963416499419eee719f02a4d4a:d1bf64084c8b4336781469db52ab1fb2:cbce6b53f0f49e0bf15173c25c41f876$"
 }
 }

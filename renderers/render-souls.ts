@@ -14,10 +14,10 @@ export function renderSouls({ app, souls, spriteCache }:
   app.renderer.render(app.stage);
 
   function addSoulSprite(soul: Soul) {
-    var sprite = spriteCache[soul.textureId];
+    var sprite = spriteCache[soul.id];
     if (!sprite) {
       sprite = new Sprite(utils.TextureCache[soul.textureId]);
-      spriteCache[soul.textureId] = sprite;
+      spriteCache[soul.id] = sprite;
       app.stage.addChild(sprite);
     }
     sprite.width = tileLength; 
